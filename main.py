@@ -65,8 +65,15 @@ class MyClient(discord.Client):
 		#insult
 		if message.content.startswith("!insult"):
 			string = message.content.split("@")[1].split(" ")[0]
-			await message.channel.send("{0} {1}".format("<@"+string, random.choice(list(open("insults.txt")))))
+			if string != "!458779902649303040>":
+				await message.channel.send("{0} {1}".format("<@"+string, random.choice(list(open("insults.txt")))))
+			else:
+				await message.channel.send("no u")
 			#TODO: when user insults bot say "no u".
+		
+		#awkward
+		if message.content.startswith("!awkward"):
+			await message.channel.send("https://www.youtube.com/watch?v=qzPvx8VUSDw&t=11")
 		
 		#reddit link (r/)
 		if "r/" in message.content:
