@@ -36,7 +36,21 @@ class MyClient(discord.Client):
 		
 		#list all commands
 		if message.content.startswith("!commands"):
-			await message.channel.send("not implemented yet, sorry")
+			embed = discord.Embed(title="ConchBot Commands", url="https://cdn.discordapp.com/app-icons/458779902649303040/ad2f3c141f7e7ddc31422a9f135e0c3a.png", color=0x00ff00)
+			embed.add_field(name="!ping", value="test the bot", inline=True)
+			embed.add_field(name="!commands", value="show this embed", inline=True)
+			embed.add_field(name="!deleteserver", value=":warning: delete the server :warning:", inline=True)
+			embed.add_field(name="!rip / !f", value="pay respects to the user above", inline=True)
+			embed.add_field(name="!oof", value="oof", inline=True)
+			embed.add_field(name="!lenny", value="( ͡° ͜ʖ ͡°)", inline=True)
+			embed.add_field(name="!ayylmao", value="ayy lmao", inline=True)
+			embed.add_field(name="!8ball / !conch", value="consult the magic conch!", inline=True)
+			embed.add_field(name="!insult <@user>", value="insult a user", inline=True)
+			embed.add_field(name="!awkward", value="awkward", inline=True)
+			embed.add_field(name="!jets", value="show the next winnipeg jets game", inline=True)
+			embed.add_field(name="!urban <word>", value="get a definition from urban dictionary", inline=True)
+			embed.add_field(name="/r/<sub>", value="automatically get a link to a subreddit", inline=True)
+			await message.channel.send(embed=embed)
 		
 		#prank delete the server
 		if message.content.startswith("!deleteserver"):
@@ -69,7 +83,6 @@ class MyClient(discord.Client):
 				await message.channel.send("{0} {1}".format("<@"+string, random.choice(list(open("insults.txt")))))
 			else:
 				await message.channel.send("no u")
-			#TODO: when user insults bot say "no u".
 		
 		#awkward
 		if message.content.startswith("!awkward"):
@@ -86,8 +99,21 @@ class MyClient(discord.Client):
 			r = requests.get(url = uri)
 			dict = r.json()
 			game = dict["teams"][0]["nextGameSchedule"]["dates"][0]["games"][0]
-			await message.channel.send("Game date/time: {0}\n{1}: {2},\n{3}: {4}".format(game["gameDate"], game["teams"]["away"]["team"]["name"], game["teams"]["away"]["score"],
-																										game["teams"]["home"]["team"]["name"], game["teams"]["home"]["score"]))
+			await message.channel.send("Game date/time: {0}\n{1}: {2},\n{3}: {4}".format(game["gameDate"], game["teams"]["away"]["team"]["name"], game["teams"]["away"]["score"], game["teams"]["home"]["team"]["name"], game["teams"]["home"]["score"]))
+
+		#urban dictionary define
+		if message.content.startswith("!urban"):
+			search = message.content.split("!urban ")[1]
+			uri = "https://api.urbandictionary.com/v0/define?term={0}".format(search)
+			r = requests.get(url = uri)
+			dict = r.json()
+			definition = dict["list"][0]["definition"]
+			permalink = dict["list"][0]["permalink"]
+			written_on = str(dict["list"][0]["written_on"]).split("T")[0]
+			embed = discord.Embed(title=str(search), url=str(permalink), description="**{0}**".format(definition), color=0x00ff00)
+			embed.set_author(name="Urban Dictionary Definitions", icon_url="https://lh3.googleusercontent.com/unQjigibyJQvru9rcCOX7UCqyByuf5-h_tLpA-9fYH93uqrRAnZ0J2IummiejMMhi5Ch=s180")
+			embed.set_footer(text="Written on {0}".format(str(written_on)))
+			await message.channel.send(embed=embed)
 		
 		#play youtube audio in current voice channel
 		if message.content.startswith("!play"):
